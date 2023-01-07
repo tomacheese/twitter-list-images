@@ -1,0 +1,46 @@
+{
+  "name": "twitter-list-images",
+  "version": "2.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "repository": "git@github.com:tomacheese/twitter-list-images.git",
+  "author": "Tomachi",
+  "private": true,
+  "scripts": {
+    "build": "ts-node -r tsconfig-paths/register ./src/main.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register ./src/main.ts",
+    "start": "node ./dist/main.js",
+    "compile": "tsc -p .",
+    "compile:test": "tsc -p . --noEmit",
+    "lint": "run-p -c lint:prettier lint:eslint lint:tsc",
+    "lint:prettier": "prettier --check src",
+    "lint:eslint": "eslint . --ext ts,tsx",
+    "lint:tsc": "tsc",
+    "fix": "run-s fix:prettier fix:eslint",
+    "fix:eslint": "eslint . --ext ts,tsx --fix",
+    "fix:prettier": "prettier --write src"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "4.0.5",
+    "@types/node": "18.11.18",
+    "@typescript-eslint/eslint-plugin": "5.48.0",
+    "@typescript-eslint/parser": "5.48.0",
+    "eslint": "8.31.0",
+    "eslint-config-prettier": "8.6.0",
+    "eslint-config-standard": "17.0.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-n": "15.6.0",
+    "eslint-plugin-promise": "6.1.1",
+    "js-yaml": "4.1.0",
+    "prettier": "2.8.1",
+    "ts-node": "10.9.1",
+    "ts-node-dev": "2.0.0",
+    "twitter-api-v2": "1.13.0",
+    "typescript": "4.9.4",
+    "yarn-run-all": "3.1.1"
+  },
+  "dependencies": {
+    "@fastify/cors": "8.2.0",
+    "fastify": "4.11.0"
+  }
+}

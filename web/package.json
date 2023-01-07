@@ -1,0 +1,36 @@
+{
+  "name": "twitter-list-images-web",
+  "version": "2.0.0",
+  "repository": "git@github.com:tomacheese/twitter-list-images.git",
+  "author": "Tomachi",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
+    "lintfix": "eslint --ext .js,.ts,.vue --ignore-path .gitignore . --fix"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config-typescript": "12.0.0",
+    "@types/color-thief-node": "^1.0.1",
+    "eslint": "8.31.0",
+    "eslint-plugin-nuxt": "4.0.0",
+    "sass": "1.57.1",
+    "typescript": "4.9.4",
+    "vite-plugin-eslint": "1.8.1",
+    "vue-tsc": "1.0.20"
+  },
+  "dependencies": {
+    "@kevinmarrec/nuxt-pwa": "0.13.0",
+    "@mdi/font": "7.1.96",
+    "@pinia-plugin-persistedstate/nuxt": "^1.0.0",
+    "@pinia/nuxt": "^0.4.6",
+    "color-thief-node": "^1.0.4",
+    "js-yaml": "4.1.0",
+    "nuxt": "3.0.0",
+    "vuetify": "3.0.7"
+  }
+}

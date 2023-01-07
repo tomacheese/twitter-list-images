@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  api:
+    build: ./api
+    volumes:
+      - type: bind
+        source: ./data/
+        target: /data/
+    environment:
+      CONFIG_PATH: /data/config.yml
+      TZ: Asia/Tokyo
+    init: true
+    restart: always
+
+  web:
+    build: ./web
+    volumes:
+      - type: bind
+        source: ./data/
+        target: /data/
+    ports:
+      - 8080:80
+    environment:
+      CONFIG_PATH: /data/config.yml
+      TZ: Asia/Tokyo
+    init: true
+    restart: always
