@@ -20,9 +20,7 @@ export function buildApp(): FastifyInstance {
   })
 
   // routers
-  const routers: BaseRouter[] = [
-    new ApiRouter(app, config),
-  ]
+  const routers: BaseRouter[] = [new ApiRouter(app, config)]
 
   routers.forEach((router) => {
     console.log(`Initializing route: ${router.constructor.name}`)
