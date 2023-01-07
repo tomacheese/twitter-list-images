@@ -125,7 +125,7 @@ jobs:
 
       - name: package.json update version
         run: |
-          sed -r -i "1,/version/s/\"version\": \".+\"/\"version\": \"${{ needs.calc-version.outputs.tag }}\"/" view/package.json
+          sed -r -i "1,/version/s/\"version\": \".+\"/\"version\": \"${{ needs.calc-version.outputs.tag }}\"/" web/package.json
           sed -r -i "1,/version/s/\"version\": \".+\"/\"version\": \"${{ needs.calc-version.outputs.tag }}\"/" api/package.json
           git diff
 
