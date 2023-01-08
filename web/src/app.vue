@@ -76,7 +76,7 @@ const fetchItems = async (): Promise<void> => {
     return
   }
   const results = response.data.value.items.filter((item) => {
-    return isOnlyNew.value ? !viewedIds.includes(item.image_id) : true
+    return isOnlyNew.value ? !viewedIds.value.includes(item.image_id) : true
   })
   items.value = [...items.value, ...results].filter((tweet, index, self) => {
     return self.findIndex((t) => t.image_id === tweet.image_id) === index
@@ -103,8 +103,8 @@ const onAllViewed = (): void => {
 /** さらに読み込む */
 const loadMore = async (): Promise<void> => {
   scrollToTop()
+  viewedStore.addAll(items.value.map((item) => item.image_id))
   await fetchItems()
-  viewedIds.value = [...viewedStore.imageIds]
   updateMagicGrid()
 }
 
@@ -137,8 +137,9 @@ const likeTweet = async (item: Tweet): Promise<void> => {
 watch(isOnlyNew, () => {
   settings.setOnlyNew(isOnlyNew.value)
   maxId.value = undefined
+  viewedIds.value = [...viewedStore.imageIds]
+  items.value = []
   fetchItems().then(() => {
-    viewedIds.value = [...viewedStore.imageIds]
     updateMagicGrid()
   })
 })
