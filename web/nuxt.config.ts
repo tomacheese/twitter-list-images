@@ -4,7 +4,7 @@ import { defineNuxtConfig } from 'nuxt/config'
 const baseName = process.env.BASE_NAME || 'twitter-list-images'
 const baseDescription =
   process.env.BASE_DESCRIPTION || 'Twitter List Images'
-const baseUrl = process.env.BASE_URL || 'https://localhost'
+const baseUrl = process.env.BASE_URL || 'http://192.168.0.106:7002'
 const isSsr = true
 const isDev = process.env.NODE_ENV === 'development'
 const apiBaseURL = process.env.API_BASE_URL || isDev ? 'http://localhost:8000/api' : '/api'
