@@ -1,33 +1,32 @@
 export const useViewedStore = defineStore('viewed', {
   state: (): {
-    rowIds: string[]
+    imageIds: string[]
   } => ({
-    rowIds: []
+    imageIds: []
   }),
 
   getters: {
-    getRowIds: (state) => state.rowIds,
-    isViewed: (state) => (rowId: string): boolean => state.rowIds.includes(rowId)
+    isViewed: (state) => (imageId: string): boolean => state.imageIds.includes(imageId)
   },
 
   actions: {
     /**
      * 既読済みリストに追加する
      *
-     * @param rowId 行 ID
+     * @param imageId 行 ID
      */
-    add(rowId: string) {
-      if (this.rowIds.includes(rowId)) { return }
-      this.rowIds.push(rowId)
+    add(imageId: string) {
+      if (this.imageIds.includes(imageId)) { return }
+      this.imageIds.push(imageId)
     },
     /**
      * 複数の行 ID 既読済みリストに追加する
      *
-     * @param rowIds 行 ID 群
+     * @param imageIds 行 ID 群
      */
-    addAll(rowIds: string[]) {
-      for (const rowId of rowIds) {
-        this.add(rowId)
+    addAll(imageIds: string[]) {
+      for (const imageId of imageIds) {
+        this.add(imageId)
       }
     }
   },
