@@ -25,7 +25,7 @@ const settings = useSettingsStore()
 const snackbarStore = useSnackbarStore()
 
 // --- created
-const viewedIds = [...viewedStore.getRowIds]
+const viewedIds = [...viewedStore.imageIds]
 
 // --- data
 /** アイテム一覧 */
@@ -79,7 +79,7 @@ const fetchItems = async (): Promise<void> => {
     return
   }
   const results = response.data.value.items.filter((item) => {
-    return !viewedIds.includes(item.image_id)
+    return isOnlyNew.value ? !viewedIds.includes(item.image_id) : true
   })
   items.value = [...items.value, ...results].filter((tweet, index, self) => {
     return self.findIndex((t) => t.image_id === tweet.image_id) === index
@@ -90,7 +90,6 @@ const fetchItems = async (): Promise<void> => {
 
 /** 既読状態をアップデートする */
 const onViewed = (item: Tweet): void => {
-  console.log('onViewed', item.image_id)
   viewedStore.add(item.image_id)
 }
 
@@ -111,10 +110,35 @@ const loadMore = async (): Promise<void> => {
   updateMagicGrid()
 }
 
+/** ツイートをいいねする */
+const likeTweet = async (item: Tweet): Promise<void> => {
+  if (item.liked) {
+    return
+  }
+  const response = await useFetch(`${config.public.apiBaseURL}/like/${item.tweet_id}`, {
+    method: 'POST'
+  })
+  if (response.error.value) {
+    alert(`Error: "Failed to like tweet: ${response.error.value}`)
+    return
+  }
+  if (!response || !response.data.value) {
+    return
+  }
+  snackbarStore.start('いいねしました。', 'green')
+  items.value = items.value.map((i) => {
+    if (i.tweet_id === item.tweet_id) {
+      return { ...i, liked: true }
+    }
+    return i
+  })
+}
+
 // --- watch
 /** 新しいアイテムのみ表示かどうかが変更されたら、設定に反映したうえでアイテム一覧を取得する */
 watch(isOnlyNew, () => {
   settings.setOnlyNew(isOnlyNew.value)
+  maxId.value = undefined
   fetchItems().then(() => {
     updateMagicGrid()
   })
@@ -153,7 +177,7 @@ onMounted(async () => {
         :max-col-width="magicGridSettings.maxColWidth"
       >
         <ItemWrapper v-for="item of items" :key="item.image_id" :item="item" @intersect="onViewed">
-          <CardItem :item="item" />
+          <CardItem :item="item" @like="likeTweet" />
         </ItemWrapper>
       </MagicGrid>
       <v-container>
