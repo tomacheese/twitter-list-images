@@ -24,9 +24,6 @@ const viewedStore = useViewedStore()
 const settings = useSettingsStore()
 const snackbarStore = useSnackbarStore()
 
-// --- created
-const viewedIds = [...viewedStore.imageIds]
-
 // --- data
 /** アイテム一覧 */
 const items = ref<Tweet[]>([])
@@ -34,6 +31,8 @@ const items = ref<Tweet[]>([])
 const maxId = ref<string | undefined>(undefined)
 /** ローディング中かどうか */
 const loading = ref(true)
+/** 既読アイテム一覧 */
+const viewedIds = ref<string[]>([...viewedStore.imageIds])
 
 // --- settings computed
 const isOnlyNew = computed({
@@ -107,6 +106,7 @@ const onAllViewed = (): void => {
 const loadMore = async (): Promise<void> => {
   scrollToTop()
   await fetchItems()
+  viewedIds.value = [...viewedStore.imageIds]
   updateMagicGrid()
 }
 
@@ -140,6 +140,7 @@ watch(isOnlyNew, () => {
   settings.setOnlyNew(isOnlyNew.value)
   maxId.value = undefined
   fetchItems().then(() => {
+    viewedIds.value = [...viewedStore.imageIds]
     updateMagicGrid()
   })
 })
