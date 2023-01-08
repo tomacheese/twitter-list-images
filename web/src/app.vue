@@ -8,13 +8,11 @@ import { Tweet } from './types/types'
 type ImagesApiResponse = {
   items: Tweet[]
   next_max_id: string
-  rate_limit:
-  | {
+  rate_limit: {
     limit: number
     remaining: number
     reset: number
   }
-  | undefined
 }
 
 const config = useRuntimeConfig()
