@@ -58,6 +58,8 @@ const scrollToTop = (): void => {
 
 /** アイテム一覧をAPIから取得する */
 const fetchItems = async (): Promise<void> => {
+  viewedIds.value = [...viewedStore.imageIds] // 既読アイテム一覧を更新
+
   loading.value = true
   const response = await useFetch<ImagesApiResponse>(
     `${config.public.apiBaseURL}/images`,
@@ -75,10 +77,10 @@ const fetchItems = async (): Promise<void> => {
   if (!response || !response.data.value) {
     return
   }
-  const results = response.data.value.items.filter((item) => {
+  const results = response.data.value.items
+  items.value = [...items.value, ...results].filter((item) => {
     return isOnlyNew.value ? !viewedIds.value.includes(item.image_id) : true
-  })
-  items.value = [...items.value, ...results].filter((tweet, index, self) => {
+  }).filter((tweet, index, self) => {
     return self.findIndex((t) => t.image_id === tweet.image_id) === index
   })
   maxId.value = response.data.value.next_max_id
@@ -167,15 +169,9 @@ onMounted(async () => {
       <div v-if="loading" class="d-flex justify-center my-5">
         <v-progress-circular v-if="loading" indeterminate />
       </div>
-      <MagicGrid
-        v-if="!loading && items.length !== 0"
-        ref="magicgrid"
-        :animate="true"
-        :use-min="true"
-        :gap="magicGridSettings.gap"
-        :max-cols="magicGridSettings.maxCols"
-        :max-col-width="magicGridSettings.maxColWidth"
-      >
+      <MagicGrid v-if="!loading && items.length !== 0" ref="magicgrid" :animate="true" :use-min="true"
+        :gap="magicGridSettings.gap" :max-cols="magicGridSettings.maxCols"
+        :max-col-width="magicGridSettings.maxColWidth">
         <ItemWrapper v-for="item of items" :key="item.image_id" :item="item" @intersect="onViewed">
           <CardItem :item="item" @like="likeTweet" />
         </ItemWrapper>
