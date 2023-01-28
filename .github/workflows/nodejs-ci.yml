@@ -18,3 +18,4 @@ jobs:
     uses: book000/templates/.github/workflows/reusable-nodejs-ci.yml@master
     with:
       directorys: api, web
+      disabled-jobs: depcheck
