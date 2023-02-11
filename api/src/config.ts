@@ -24,11 +24,14 @@ const isConfig = (config: any): config is Configuration => {
     'twapi.baseUrl is defined': !!config.twapi.baseUrl,
     'twapi.baseUrl is string': typeof config.twapi.baseUrl === 'string',
     'twapi.basicUsername is defined': !!config.twapi.basicUsername,
-    'twapi.basicUsername is string': typeof config.twapi.basicUsername === 'string',
+    'twapi.basicUsername is string':
+      typeof config.twapi.basicUsername === 'string',
     'twapi.basicPassword is defined': !!config.twapi.basicPassword,
-    'twapi.basicPassword is string': typeof config.twapi.basicPassword === 'string',
+    'twapi.basicPassword is string':
+      typeof config.twapi.basicPassword === 'string',
     'twapi.targetListId is defined': !!config.twapi.targetListId,
-    'twapi.targetListId is string': typeof config.twapi.targetListId === 'string',
+    'twapi.targetListId is string':
+      typeof config.twapi.targetListId === 'string',
   }
   const result = Object.values(checks).every(Boolean)
   if (!result) {
