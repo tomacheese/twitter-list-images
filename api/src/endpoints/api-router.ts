@@ -1,6 +1,8 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { BaseRouter } from '@/base-router'
-import { TwitterApi } from 'twitter-api-v2'
+import { TwApi } from '@/twapi'
+import { isFullUser } from 'twitter-d'
+import { Logger } from '@/logger'
 
 interface Tweet {
   tweet_id: string
@@ -39,34 +41,32 @@ export class ApiRouter extends BaseRouter {
   async routeGetImages(
     request: FastifyRequest<{
       Querystring: {
-        max_id?: string
+        page?: string
       }
     }>,
     reply: FastifyReply
   ): Promise<void> {
-    const maxId = request.query.max_id
+    const logger = Logger.configure('routeGetImages')
+    const page = request.query.page ? parseInt(request.query.page) : 1
 
-    const twitterApi = new TwitterApi({
-      appKey: this.config.twitter.consumerKey,
-      appSecret: this.config.twitter.consumerSecret,
-      accessToken: this.config.twitter.accessToken,
-      accessSecret: this.config.twitter.accessSecret,
-    })
-    const statuses = await twitterApi.v1.listStatuses({
-      list_id: this.config.twitter.targetListId,
-      include_rts: true,
-      include_entities: true,
-      tweet_mode: 'extended',
-      count: 200,
-      max_id: maxId,
-    })
-    const imagesTweets = statuses.tweets.filter(
+    const twApi = new TwApi(this.config)
+    const tweets = await twApi.getListTweets(100 * page)
+    logger.info(`tweets: ${tweets.length}`)
+
+    const imagesTweets = tweets.filter(
       (tweet) => tweet.extended_entities && tweet.extended_entities.media
     )
+    logger.info(`imagesTweets: ${imagesTweets.length}`)
     const images: Tweet[] = this.filterNull(
       imagesTweets.flatMap((tweet) => {
-        if (!tweet.extended_entities || !tweet.extended_entities.media)
+        if (!isFullUser(tweet.user)) {
           return null
+        }
+        if (!tweet.extended_entities || !tweet.extended_entities.media) {
+          return null
+        }
+        const user = tweet.user
+
         const media = tweet.extended_entities.media
         return media.map((m) => {
           if (m.type !== 'photo') return null
@@ -74,10 +74,10 @@ export class ApiRouter extends BaseRouter {
             tweet_id: tweet.id_str,
             image_id: m.id_str,
             user: {
-              user_id: tweet.user.id_str,
-              screen_name: tweet.user.screen_name,
-              name: tweet.user.name,
-              profile_image_url_https: tweet.user.profile_image_url_https,
+              user_id: user.id_str,
+              screen_name: user.screen_name,
+              name: user.name,
+              profile_image_url_https: user.profile_image_url_https,
             },
             media: {
               id_str: m.id_str,
@@ -92,10 +92,7 @@ export class ApiRouter extends BaseRouter {
     )
     reply.send({
       items: images,
-      next_max_id: (
-        BigInt(statuses.tweets[statuses.data.length - 1].id_str) - BigInt(1)
-      ).toString(),
-      rate_limit: statuses.rateLimit,
+      next_page: page + 1,
     })
   }
 
@@ -109,29 +106,20 @@ export class ApiRouter extends BaseRouter {
   ): Promise<void> {
     const tweetId = request.params.tweet_id
 
-    const twitterApi = new TwitterApi({
-      appKey: this.config.twitter.consumerKey,
-      appSecret: this.config.twitter.consumerSecret,
-      accessToken: this.config.twitter.accessToken,
-      accessSecret: this.config.twitter.accessSecret,
-    })
-    const result = await twitterApi.v1
-      .post('favorites/create.json', {
-        id: tweetId,
+    const twApi = new TwApi(this.config)
+    const result = await twApi
+      .likeTweet(tweetId)
+      .then(() => true)
+      .catch((e) => e.message)
+    if (result === true) {
+      reply.send({
+        liked: true,
       })
-      .catch((err) => {
-        reply
-          .code(400)
-          .send(
-            `Bad Request: ${err.errors[0].message} (code: ${err.errors[0].code})`
-          )
-        return null
-      })
-    if (!result) {
       return
     }
     reply.send({
-      liked: true,
+      liked: false,
+      error: result,
     })
   }
 
