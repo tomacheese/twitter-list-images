@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "twapi": {
+            "properties": {
+                "baseUrl": {
+                    "type": "string"
+                },
+                "basicPassword": {
+                    "type": "string"
+                },
+                "basicUsername": {
+                    "type": "string"
+                },
+                "targetListId": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "baseUrl",
+                "basicPassword",
+                "basicUsername",
+                "targetListId"
+            ],
+            "type": "object"
+        }
+    },
+    "required": [
+        "twapi"
+    ],
+    "type": "object"
+}
+

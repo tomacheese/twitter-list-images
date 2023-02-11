@@ -7,12 +7,7 @@ import { Tweet } from './types/types'
 
 type ImagesApiResponse = {
   items: Tweet[]
-  next_max_id: string
-  rate_limit: {
-    limit: number
-    remaining: number
-    reset: number
-  }
+  next_page: string
 }
 
 const config = useRuntimeConfig()
@@ -25,8 +20,8 @@ const snackbarStore = useSnackbarStore()
 // --- data
 /** アイテム一覧 */
 const items = ref<Tweet[]>([])
-/** 次回リクエスト用 max_id */
-const maxId = ref<string | undefined>(undefined)
+/** 次回リクエスト用ページ */
+const nextPage = ref<string | undefined>(undefined)
 /** ローディング中かどうか */
 const loading = ref(true)
 /** 既読アイテム一覧 */
@@ -66,7 +61,7 @@ const fetchItems = async (): Promise<void> => {
     {
       method: 'GET',
       params: {
-        max_id: maxId.value
+        page: nextPage.value
       }
     }
   )
@@ -83,7 +78,7 @@ const fetchItems = async (): Promise<void> => {
   }).filter((tweet, index, self) => {
     return self.findIndex((t) => t.image_id === tweet.image_id) === index
   })
-  maxId.value = response.data.value.next_max_id
+  nextPage.value = response.data.value.next_page
   loading.value = false
 }
 
@@ -138,7 +133,7 @@ const likeTweet = async (item: Tweet): Promise<void> => {
 /** 新しいアイテムのみ表示かどうかが変更されたら、設定に反映したうえでアイテム一覧を取得する */
 watch(isOnlyNew, () => {
   settings.setOnlyNew(isOnlyNew.value)
-  maxId.value = undefined
+  nextPage.value = undefined
   viewedIds.value = [...viewedStore.imageIds]
   items.value = []
   fetchItems().then(() => {
@@ -169,9 +164,15 @@ onMounted(async () => {
       <div v-if="loading" class="d-flex justify-center my-5">
         <v-progress-circular v-if="loading" indeterminate />
       </div>
-      <MagicGrid v-if="!loading && items.length !== 0" ref="magicgrid" :animate="true" :use-min="true"
-        :gap="magicGridSettings.gap" :max-cols="magicGridSettings.maxCols"
-        :max-col-width="magicGridSettings.maxColWidth">
+      <MagicGrid
+        v-if="!loading && items.length !== 0"
+        ref="magicgrid"
+        :animate="true"
+        :use-min="true"
+        :gap="magicGridSettings.gap"
+        :max-cols="magicGridSettings.maxCols"
+        :max-col-width="magicGridSettings.maxColWidth"
+      >
         <ItemWrapper v-for="item of items" :key="item.image_id" :item="item" @intersect="onViewed">
           <CardItem :item="item" @like="likeTweet" />
         </ItemWrapper>

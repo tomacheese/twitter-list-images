@@ -3,6 +3,7 @@ import { BaseRouter } from './base-router'
 import { getConfig } from './config'
 import { ApiRouter } from './endpoints/api-router'
 import cors from '@fastify/cors'
+import { Logger } from './logger'
 
 /**
  * Fastify アプリケーションを構築する
@@ -10,6 +11,7 @@ import cors from '@fastify/cors'
  * @returns Fastify アプリケーション
  */
 export function buildApp(): FastifyInstance {
+  const logger = Logger.configure('buildApp')
   const config = getConfig()
 
   const app = fastify()
@@ -23,7 +25,7 @@ export function buildApp(): FastifyInstance {
   const routers: BaseRouter[] = [new ApiRouter(app, config)]
 
   routers.forEach((router) => {
-    console.log(`Initializing route: ${router.constructor.name}`)
+    logger.info(`⏩ Initializing route: ${router.constructor.name}`)
     router.init()
   })
 
