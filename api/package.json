@@ -49,6 +49,6 @@
   },
   "dependencies": {
     "@fastify/cors": "8.2.0",
-    "fastify": "4.14.0"
+    "fastify": "4.14.1"
   }
 }
