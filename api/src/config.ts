@@ -14,13 +14,19 @@ export class TLIConfiguration extends ConfigFramework<Configuration> {
     return {
       'twapi is required': (config) => !!config.twapi,
       'twapi.baseUrl is required': (config) => !!config.twapi.baseUrl,
-      'twapi.baseUrl is string': (config) => typeof config.twapi.baseUrl === 'string',
-      'twapi.basicUsername is required': (config) => !!config.twapi.basicUsername,
-      'twapi.basicUsername is string': (config) => typeof config.twapi.basicUsername === 'string',
-      'twapi.basicPassword is required': (config) => !!config.twapi.basicPassword,
-      'twapi.basicPassword is string': (config) => typeof config.twapi.basicPassword === 'string',
+      'twapi.baseUrl is string': (config) =>
+        typeof config.twapi.baseUrl === 'string',
+      'twapi.basicUsername is required': (config) =>
+        !!config.twapi.basicUsername,
+      'twapi.basicUsername is string': (config) =>
+        typeof config.twapi.basicUsername === 'string',
+      'twapi.basicPassword is required': (config) =>
+        !!config.twapi.basicPassword,
+      'twapi.basicPassword is string': (config) =>
+        typeof config.twapi.basicPassword === 'string',
       'twapi.targetListId is required': (config) => !!config.twapi.targetListId,
-      'twapi.targetListId is string': (config) => typeof config.twapi.targetListId === 'string',
+      'twapi.targetListId is string': (config) =>
+        typeof config.twapi.targetListId === 'string',
     }
   }
 }

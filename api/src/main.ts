@@ -10,7 +10,9 @@ async function main() {
   config.load()
   if (!config.validate()) {
     logger.error('❌ Configuration is invalid')
-    logger.error(`💡 Missing check(s): ${config.getValidateFailures().join(', ')}`)
+    logger.error(
+      `💡 Missing check(s): ${config.getValidateFailures().join(', ')}`
+    )
     process.exitCode = 1
     return
   }
