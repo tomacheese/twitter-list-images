@@ -1,20 +1,26 @@
 import axios, { AxiosInstance } from 'axios'
-import { Configuration } from './config'
 import { Status } from 'twitter-d'
+
+interface TwApiOptions {
+  baseUrl: string
+  basicUsername: string
+  basicPassword: string
+  targetListId: string
+}
 
 export class TwApi {
   private twApiAxios: AxiosInstance | undefined
   private targetListId: string | undefined
 
-  constructor(config: Configuration) {
+  constructor(options: TwApiOptions) {
     this.twApiAxios = axios.create({
-      baseURL: config.twapi.baseUrl,
+      baseURL: options.baseUrl,
       auth: {
-        username: config.twapi.basicUsername,
-        password: config.twapi.basicPassword,
+        username: options.basicUsername,
+        password: options.basicPassword,
       },
     })
-    this.targetListId = config.twapi.targetListId
+    this.targetListId = options.targetListId
   }
 
   public async getListTweets(limit: number) {
