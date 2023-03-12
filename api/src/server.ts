@@ -1,18 +1,18 @@
 import fastify, { FastifyInstance } from 'fastify'
 import { BaseRouter } from './base-router'
-import { getConfig } from './config'
 import { ApiRouter } from './endpoints/api-router'
 import cors from '@fastify/cors'
-import { Logger } from './logger'
+import { Logger } from '@book000/node-utils'
+import { TLIConfiguration } from './config'
 
 /**
  * Fastify アプリケーションを構築する
  *
+ * @param config 設定
  * @returns Fastify アプリケーション
  */
-export function buildApp(): FastifyInstance {
+export function buildApp(config: TLIConfiguration): FastifyInstance {
   const logger = Logger.configure('buildApp')
-  const config = getConfig()
 
   const app = fastify()
   app.register(cors, {

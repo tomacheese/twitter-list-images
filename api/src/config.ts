@@ -1,9 +1,4 @@
-import fs from 'fs'
-import { Logger } from './logger'
-
-export const PATH = {
-  config: process.env.CONFIG_PATH || 'data/config.json',
-}
+import { ConfigFramework } from '@book000/node-utils'
 
 export interface Configuration {
   twapi: {
@@ -14,44 +9,24 @@ export interface Configuration {
   }
 }
 
-const isConfig = (config: any): config is Configuration => {
-  const logger = Logger.configure('isConfig')
-  const checks: {
-    [key: string]: boolean
-  } = {
-    'config is defined': !!config,
-    'twapi is defined': !!config.twapi,
-    'twapi.baseUrl is defined': !!config.twapi.baseUrl,
-    'twapi.baseUrl is string': typeof config.twapi.baseUrl === 'string',
-    'twapi.basicUsername is defined': !!config.twapi.basicUsername,
-    'twapi.basicUsername is string':
-      typeof config.twapi.basicUsername === 'string',
-    'twapi.basicPassword is defined': !!config.twapi.basicPassword,
-    'twapi.basicPassword is string':
-      typeof config.twapi.basicPassword === 'string',
-    'twapi.targetListId is defined': !!config.twapi.targetListId,
-    'twapi.targetListId is string':
-      typeof config.twapi.targetListId === 'string',
-  }
-  const result = Object.values(checks).every(Boolean)
-  if (!result) {
-    logger.error('Invalid config. Missing check(s):')
-    for (const [key, value] of Object.entries(checks)) {
-      if (!value) {
-        logger.error(`- ${key}`)
-      }
+export class TLIConfiguration extends ConfigFramework<Configuration> {
+  protected validates(): { [key: string]: (config: Configuration) => boolean } {
+    return {
+      'twapi is required': (config) => !!config.twapi,
+      'twapi.baseUrl is required': (config) => !!config.twapi.baseUrl,
+      'twapi.baseUrl is string': (config) =>
+        typeof config.twapi.baseUrl === 'string',
+      'twapi.basicUsername is required': (config) =>
+        !!config.twapi.basicUsername,
+      'twapi.basicUsername is string': (config) =>
+        typeof config.twapi.basicUsername === 'string',
+      'twapi.basicPassword is required': (config) =>
+        !!config.twapi.basicPassword,
+      'twapi.basicPassword is string': (config) =>
+        typeof config.twapi.basicPassword === 'string',
+      'twapi.targetListId is required': (config) => !!config.twapi.targetListId,
+      'twapi.targetListId is string': (config) =>
+        typeof config.twapi.targetListId === 'string',
     }
   }
-  return result
-}
-
-export function getConfig(): Configuration {
-  if (!fs.existsSync(PATH.config)) {
-    throw new Error(`Config file not found: ${PATH.config}`)
-  }
-  const config = JSON.parse(fs.readFileSync(PATH.config, 'utf8'))
-  if (!isConfig(config)) {
-    throw new Error('Invalid config')
-  }
-  return config
 }

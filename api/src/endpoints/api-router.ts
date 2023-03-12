@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from 'fastify'
 import { BaseRouter } from '@/base-router'
 import { TwApi } from '@/twapi'
 import { isFullUser } from 'twitter-d'
-import { Logger } from '@/logger'
+import { Logger } from '@book000/node-utils'
 
 interface Tweet {
   tweet_id: string
@@ -49,14 +49,19 @@ export class ApiRouter extends BaseRouter {
     const logger = Logger.configure('routeGetImages')
     const page = request.query.page ? parseInt(request.query.page) : 1
 
-    const twApi = new TwApi(this.config)
+    const twApi = new TwApi({
+      baseUrl: this.config.get('twapi').baseUrl,
+      basicUsername: this.config.get('twapi').basicUsername,
+      basicPassword: this.config.get('twapi').basicPassword,
+      targetListId: this.config.get('twapi').targetListId,
+    })
     const tweets = await twApi.getListTweets(100 * page)
-    logger.info(`tweets: ${tweets.length}`)
+    logger.info(`📚 tweets: ${tweets.length}`)
 
     const imagesTweets = tweets.filter(
       (tweet) => tweet.extended_entities && tweet.extended_entities.media
     )
-    logger.info(`imagesTweets: ${imagesTweets.length}`)
+    logger.info(`🖼️ imagesTweets: ${imagesTweets.length}`)
     const images: Tweet[] = this.filterNull(
       imagesTweets.flatMap((tweet) => {
         if (!isFullUser(tweet.user)) {
@@ -106,7 +111,12 @@ export class ApiRouter extends BaseRouter {
   ): Promise<void> {
     const tweetId = request.params.tweet_id
 
-    const twApi = new TwApi(this.config)
+    const twApi = new TwApi({
+      baseUrl: this.config.get('twapi').baseUrl,
+      basicUsername: this.config.get('twapi').basicUsername,
+      basicPassword: this.config.get('twapi').basicPassword,
+      targetListId: this.config.get('twapi').targetListId,
+    })
     const result = await twApi
       .likeTweet(tweetId)
       .then(() => true)
