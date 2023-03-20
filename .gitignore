@@ -84,3 +84,4 @@ data/
 db-data/
 config.yml
 yarn-error.log
+logs/
