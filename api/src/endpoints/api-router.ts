@@ -29,7 +29,7 @@ export class ApiRouter extends BaseRouter {
     this.fastify.register(
       (fastify, _, done) => {
         fastify.get('/images', this.routeGetImages.bind(this))
-        // fastify.post('/like/:tweet_id', this.routePostLike.bind(this))
+        fastify.post('/like/:tweet_id', this.routePostLike.bind(this))
         done()
       },
       { prefix: '/api' }
@@ -92,8 +92,6 @@ export class ApiRouter extends BaseRouter {
     })
   }
 
-  /*
-
   async routePostLike(
     request: FastifyRequest<{
       Params: {
@@ -104,13 +102,7 @@ export class ApiRouter extends BaseRouter {
   ): Promise<void> {
     const tweetId = request.params.tweet_id
 
-    const twApi = new TwApi({
-      baseUrl: this.config.get('twapi').baseUrl,
-      basicUsername: this.config.get('twapi').basicUsername,
-      basicPassword: this.config.get('twapi').basicPassword,
-      targetListId: this.config.get('twapi').targetListId,
-    })
-    const result = await twApi
+    const result = await this.twitter
       .likeTweet(tweetId)
       .then(() => true)
       .catch((e) => e.message)
@@ -125,9 +117,4 @@ export class ApiRouter extends BaseRouter {
       error: result,
     })
   }
-
-  filterNull<T>(items: (T | null)[]): T[] {
-    return items.filter((item) => item !== null).flatMap((item) => item) as T[]
-  }
-  */
 }
