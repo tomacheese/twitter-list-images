@@ -1,8 +1,6 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
-import { BaseRouter } from '@/base-router'
-import { TwApi } from '@/twapi'
-import { isFullUser } from 'twitter-d'
-import { Logger } from '@book000/node-utils'
+import { BaseRouter } from '@/lib/base-router'
+import { Utils } from '@/lib/utils'
+import { FastifyReply, FastifyRequest } from 'fastify'
 
 interface Tweet {
   tweet_id: string
@@ -46,25 +44,18 @@ export class ApiRouter extends BaseRouter {
     }>,
     reply: FastifyReply
   ): Promise<void> {
-    const logger = Logger.configure('routeGetImages')
     const page = request.query.page ? parseInt(request.query.page) : 1
-
-    const twApi = new TwApi({
-      baseUrl: this.config.get('twapi').baseUrl,
-      basicUsername: this.config.get('twapi').basicUsername,
-      basicPassword: this.config.get('twapi').basicPassword,
-      targetListId: this.config.get('twapi').targetListId,
-    })
-    const tweets = await twApi.getListTweets(100 * page)
-    logger.info(`📚 tweets: ${tweets.length}`)
+    const tweets = await this.twitter.getListTweets(
+      this.config.get('twitter').targetListId,
+      100 * page
+    )
 
     const imagesTweets = tweets.filter(
       (tweet) => tweet.extended_entities && tweet.extended_entities.media
     )
-    logger.info(`🖼️ imagesTweets: ${imagesTweets.length}`)
-    const images: Tweet[] = this.filterNull(
+    const images: Tweet[] = Utils.filterNull(
       imagesTweets.flatMap((tweet) => {
-        if (!isFullUser(tweet.user)) {
+        if (!Utils.isFullUser(tweet.user)) {
           return null
         }
         if (!tweet.extended_entities || !tweet.extended_entities.media) {
@@ -111,13 +102,7 @@ export class ApiRouter extends BaseRouter {
   ): Promise<void> {
     const tweetId = request.params.tweet_id
 
-    const twApi = new TwApi({
-      baseUrl: this.config.get('twapi').baseUrl,
-      basicUsername: this.config.get('twapi').basicUsername,
-      basicPassword: this.config.get('twapi').basicPassword,
-      targetListId: this.config.get('twapi').targetListId,
-    })
-    const result = await twApi
+    const result = await this.twitter
       .likeTweet(tweetId)
       .then(() => true)
       .catch((e) => e.message)
@@ -131,9 +116,5 @@ export class ApiRouter extends BaseRouter {
       liked: false,
       error: result,
     })
-  }
-
-  filterNull<T>(items: (T | null)[]): T[] {
-    return items.filter((item) => item !== null).flatMap((item) => item) as T[]
   }
 }

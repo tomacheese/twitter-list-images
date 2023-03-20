@@ -1,32 +1,36 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "properties": {
-        "twapi": {
+    "definitions": {
+        "TwitterConfig": {
             "properties": {
-                "baseUrl": {
+                "authCodeSecret": {
                     "type": "string"
                 },
-                "basicPassword": {
-                    "type": "string"
-                },
-                "basicUsername": {
+                "password": {
                     "type": "string"
                 },
                 "targetListId": {
                     "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             },
             "required": [
-                "baseUrl",
-                "basicPassword",
-                "basicUsername",
-                "targetListId"
+                "password",
+                "targetListId",
+                "username"
             ],
             "type": "object"
         }
     },
+    "properties": {
+        "twitter": {
+            "$ref": "#/definitions/TwitterConfig"
+        }
+    },
     "required": [
-        "twapi"
+        "twitter"
     ],
     "type": "object"
 }

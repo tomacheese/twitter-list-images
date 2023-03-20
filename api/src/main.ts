@@ -1,6 +1,6 @@
 import { Logger } from '@book000/node-utils'
-import { TLIConfiguration } from './config'
-import { buildApp } from './server'
+import { TLIConfiguration } from './lib/config'
+import { buildApp } from './lib/server'
 
 async function main() {
   const logger = Logger.configure('main')
@@ -17,7 +17,7 @@ async function main() {
     return
   }
 
-  const app = buildApp(config)
+  const app = await buildApp(config)
   const host = process.env.API_HOST || '0.0.0.0'
   const port = process.env.API_PORT ? parseInt(process.env.API_PORT, 10) : 8000
   app.listen({ host, port }, (err, address) => {

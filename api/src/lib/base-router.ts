@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { TLIConfiguration } from './config'
+import { Twitter } from './twitter'
 
 /**
  * REST API ルーターの基底クラス
@@ -7,10 +8,16 @@ import { TLIConfiguration } from './config'
 export abstract class BaseRouter {
   protected fastify: FastifyInstance
   protected config: TLIConfiguration
+  protected twitter: Twitter
 
-  constructor(fastify: FastifyInstance, config: TLIConfiguration) {
+  constructor(
+    fastify: FastifyInstance,
+    config: TLIConfiguration,
+    twitter: Twitter
+  ) {
     this.fastify = fastify
     this.config = config
+    this.twitter = twitter
   }
 
   /**
