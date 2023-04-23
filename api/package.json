@@ -2,15 +2,15 @@
   "name": "twitter-list-images",
   "version": "2.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "repository": "git@github.com:tomacheese/twitter-list-images.git",
   "author": "Tomachi",
   "private": true,
+  "main": "dist/index.js",
+  "repository": "git@github.com:tomacheese/twitter-list-images.git",
   "scripts": {
     "build": "ts-node -r tsconfig-paths/register ./src/main.ts",
     "dev": "ts-node-dev -r tsconfig-paths/register ./src/main.ts",
     "package": "run-s clean compile packing",
-    "packing": "ncc build ./dist/main.js -o output/ -m",
+    "packing": "ncc build ./dist/main.js -o output/",
     "compile": "tsc -p .",
     "compile:test": "tsc -p . --noEmit",
     "clean": "rimraf dist output",
@@ -23,6 +23,10 @@
     "fix": "run-s fix:prettier fix:eslint",
     "fix:eslint": "eslint . --ext ts,tsx --fix",
     "fix:prettier": "prettier --write src"
+  },
+  "dependencies": {
+    "@fastify/cors": "8.2.1",
+    "fastify": "4.15.0"
   },
   "devDependencies": {
     "@book000/node-utils": "1.2.40",
@@ -52,9 +56,5 @@
     "winston": "3.8.2",
     "winston-daily-rotate-file": "4.7.1",
     "yarn-run-all": "3.1.1"
-  },
-  "dependencies": {
-    "@fastify/cors": "8.2.1",
-    "fastify": "4.15.0"
   }
 }
