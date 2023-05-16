@@ -31,6 +31,6 @@
     "color-thief-node": "^1.0.4",
     "js-yaml": "4.1.0",
     "nuxt": "3.4.3",
-    "vuetify": "3.2.4"
+    "vuetify": "3.2.5"
   }
 }
