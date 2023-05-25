@@ -25,7 +25,7 @@
     "fix:prettier": "prettier --write src"
   },
   "dependencies": {
-    "@fastify/cors": "8.2.1",
+    "@fastify/cors": "8.3.0",
     "fastify": "4.17.0"
   },
   "devDependencies": {
