@@ -43,7 +43,7 @@
     "eslint-plugin-n": "16.0.2",
     "eslint-plugin-promise": "6.1.1",
     "genson-js": "0.0.8",
-    "json-schema-to-typescript": "13.1.0",
+    "json-schema-to-typescript": "13.1.1",
     "logform": "2.5.1",
     "otplib": "12.0.1",
     "prettier": "2.8.8",
