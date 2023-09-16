@@ -17,10 +17,10 @@
     call-me-maybe "^1.0.1"
     js-yaml "^4.1.0"
 
-"@book000/node-utils@1.6.1":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@book000/node-utils/-/node-utils-1.6.1.tgz#b110c1bc2cfd623e3f0bc58c4ce5510b4373e3d2"
-  integrity sha512-+UU2c9mgUJ+PEJ8K5Marb4R0E3zI27zvc+wt0AB+Q3q4mk7aWb4zjY76JeO4TPLePvYO4wz/2PAOnW5jyCVr4w==
+"@book000/node-utils@1.6.3":
+  version "1.6.3"
+  resolved "https://registry.yarnpkg.com/@book000/node-utils/-/node-utils-1.6.3.tgz#b88e3a217ae047d7829cb0a9e33dd75045813349"
+  integrity sha512-Q+fDtaF+DeGMzxcNapixWn+4pD1F33yAcjmgKxZLcMXN6QxxypyFnjimJ+iZQLLgus7KiXmhhcKldc8v0DqJlw==
   dependencies:
     axios "1.5.0"
     cycle "1.0.3"
