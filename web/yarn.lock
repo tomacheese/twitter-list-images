@@ -1845,14 +1845,14 @@
     minimatch "^9.0.3"
 
 "@types/color-thief-node@^1.0.1":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@types/color-thief-node/-/color-thief-node-1.0.3.tgz#087184c879fad479e7a6ccf384da02aca17e1b04"
-  integrity sha512-AeZTpkoRgMp3171kuho/AXgvAhlvo4F/CBtQxGLVaVLkmNBudFAg/btVrpuL3icqrhKFvFEcjN4XqJjOT6uVrw==
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@types/color-thief-node/-/color-thief-node-1.0.4.tgz#33b250895de87ed7090dce44bee2b19a419acbb6"
+  integrity sha512-9mHoSyLAojvDQsZWxu3FHhiwUsQC7Lfuxrii6rnYc11uJ7GH2ODaM82gyDCXnR/5eXqlOymauUXU5eCEYAHS4A==
 
 "@types/eslint@^8.4.5":
-  version "8.44.5"
-  resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-8.44.5.tgz#24d7f3b07aff47a13b570efd5c52d96f38cd352e"
-  integrity sha512-Ol2eio8LtD/tGM4Ga7Jb83NuFwEv3NqvssSlifXL9xuFpSyQZw0ecmm2Kux6iU0KxQmp95hlPmGCzGJ0TCFeRA==
+  version "8.44.6"
+  resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-8.44.6.tgz#60e564551966dd255f4c01c459f0b4fb87068603"
+  integrity sha512-P6bY56TVmX8y9J87jHNgQh43h6VVU+6H7oN7hgvivV81K2XY8qJZ5vqPy/HdUoVIelii2kChYVzQanlswPWVFw==
   dependencies:
     "@types/estree" "*"
     "@types/json-schema" "*"
